@@ -33,16 +33,19 @@ class Crud {
         },
         body: jsonEncode(data),
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return jsonDecode(response.body);
-      } else {
-        print("Error status code: ${response.statusCode}");
-        return null;
-      }
+
+      print("Status code: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+      return jsonDecode(response.body);
     } catch (e) {
       print("Error Catch $e");
-      return null;
+      return {
+        "status": "error",
+        "error": e.toString(),
+      };
     }
   }
+
 
 }

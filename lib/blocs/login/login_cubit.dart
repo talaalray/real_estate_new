@@ -4,36 +4,29 @@ import 'package:real_estate/constans/links_api.dart';
 
 import '../../crud.dart';
 
-
-class SignupCubit extends Cubit<SignupState> {
+class LoginCubit extends Cubit<SignupState> {
   final Crud crud;
 
-  SignupCubit(this.crud) : super(SignupInitial());
+  LoginCubit(this.crud) : super(SignupInitial());
 
-  Future<void> signUp({
-    required String name,
+  Future<void> login({
     required String email,
     required String password,
-    required String passwordConfirmation,
-    required String phoneNumber,
   }) async {
     emit(SignupLoading());
     try {
       final response = await crud.postRequest(
-        AppLink.signup,
+        AppLink.login,
         {
-          "name": name,
-          "email": email,
+          "identifier": email,
           "password": password,
-          "password_confirmation": passwordConfirmation,
-          "phone_number": phoneNumber,
         },
       );
-      print("Signup response: $response");
+      print("login response: $response");
       if (response != null && response['status'] == "success") {
         emit(SignupSuccess());
       } else {
-        String errorMessage = "حدث خطأ أثناء التسجيل";
+        String errorMessage = "حدث خطأ أثناء تسجيل الدخول";
         if (response != null) {
           if (response.containsKey('message')) {
             errorMessage = response['message'];
@@ -48,4 +41,3 @@ class SignupCubit extends Cubit<SignupState> {
     }
   }
 }
-

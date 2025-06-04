@@ -4,8 +4,9 @@ import 'package:real_estate/blocs/signup/signup_state.dart';
 import 'package:real_estate/crud.dart';
 import 'package:real_estate/widgets/auth/bottum_go.dart';
 import 'package:real_estate/widgets/auth/bouttom_auth.dart';
-import '../blocs/signup/signup_cubit.dart';
-import '../widgets/auth/text_field.dart';
+import '../../blocs/signup/signup_cubit.dart';
+import '../../widgets/auth/custom_input_field.dart';
+import 'login.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -21,6 +22,16 @@ class _SignupState extends State<Signup> {
   final password = TextEditingController();
   final passwordConfirmation = TextEditingController();
   final phoneNumber = TextEditingController();
+
+  @override
+  void dispose() {
+    name.dispose();
+    email.dispose();
+    password.dispose();
+    passwordConfirmation.dispose();
+    phoneNumber.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,63 +58,55 @@ class _SignupState extends State<Signup> {
               child: ListView(
                 children: [
                   const SizedBox(height: 30),
-                  Container(
-                    width: double.infinity,
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          color: Colors.grey,
-                        ),
+                  const Center(
+                    child: Text(
+                      'إنشاء حساب',
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   const SizedBox(height: 30),
-                  TextFiledWidgets(
-                    labelText: "اسم المستخدم",
-                    hintText: "ادخل اسم المستخدم",
-                    icon: Icons.person,
+                  CustomInputField(
                     controller: name,
-                    isNumber: false,
+                    label: 'اسم المستخدم',
+                    hintText: 'ادخل اسمك',
+                    icon: Icons.person,
                   ),
                   const SizedBox(height: 20),
-                  TextFiledWidgets(
-                    labelText: "البريد الالكتروني",
-                    hintText: "ادخل البريد الالكتروني",
-                    icon: Icons.email,
+                   CustomInputField(
                     controller: email,
-                    isNumber: false,
+                    label: 'البريد الإلكتروني',
+                    hintText: 'ادخل بريدك الإلكتروني',
+                    icon: Icons.email,
                   ),
                   const SizedBox(height: 20),
-                  TextFiledWidgets(
-                    labelText: "كلمة المرور",
-                    hintText: "ادخل كلمة المرور",
+                   CustomInputField(
+                     controller: password,
+                    label: 'كلمة المرور',
+                    hintText: 'ادخل كلمة المرور',
                     icon: Icons.lock,
-                    iconShow: Icons.remove_red_eye_outlined,
-                    controller: password,
-                    isNumber: false,
+                    obscureText: true,
                   ),
                   const SizedBox(height: 20),
-                  TextFiledWidgets(
-                    labelText: "تأكيد كلمة المرور",
-                    hintText: "اعد ادخال كلمة المرور",
+                   CustomInputField(
+                     controller: passwordConfirmation,
+                    label: 'تأكيد كلمة المرور',
+                    hintText: 'اعد إدخال كلمة المرور',
                     icon: Icons.lock,
-                    iconShow: Icons.remove_red_eye_outlined,
-                    controller: passwordConfirmation,
-                    isNumber: false,
+                    obscureText: true,
                   ),
                   const SizedBox(height: 20),
-                  TextFiledWidgets(
-                    labelText: "رقم الهاتف",
-                    hintText: "ادخل رقم الهاتف",
-                    icon: Icons.phone_android,
+                   CustomInputField(
                     controller: phoneNumber,
-                    isNumber: true,
+                    label: 'رقم الهاتف',
+                    hintText: 'ادخل رقم الهاتف',
+                    icon: Icons.phone_android,
                   ),
                   const SizedBox(height: 30),
                   BottumAuth(
-                    text: "انشاء حساب",
+                    title: "انشاء حساب",
                     onPressed: () {
                       BlocProvider.of<SignupCubit>(context).signUp(
                         name: name.text,
@@ -115,11 +118,11 @@ class _SignupState extends State<Signup> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  BottomGoToWidget(
-                    text: "لديك حساب ؟ ",
-                    buttom: "تسجيل الدخول",
+                  BottumGo(
+                    questionText: "لديك حساب ؟ ",
+                    actionText: "تسجيل الدخول",
                     onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (_) => Login()));
+                       Navigator.push(context, MaterialPageRoute(builder: (_) => Login()));
                     },
                   ),
                 ],

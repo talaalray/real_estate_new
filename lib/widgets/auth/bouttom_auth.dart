@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:real_estate/constans/color.dart';
 
 class BottumAuth extends StatelessWidget {
-  final String text;
+  final String title;
   final void Function() onPressed;
 
-  BottumAuth({
-    Key? key,
-    required this.text,
-    required this.onPressed,
-  }) : super(key: key);
+  const BottumAuth({super.key, required this.title, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 40,
-      height: 50,
-      margin: EdgeInsets.only(right: 130, left: 130),
-      child: MaterialButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+    return  Center(
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColor.blue,
+            foregroundColor: AppColor.white,
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          child: Text(title, style: const TextStyle(fontSize: 18)),
         ),
-        padding: EdgeInsets.all(5),
-        onPressed: onPressed,
-        color: Colors.blue,
-        textColor: Colors.white,
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      ),
+
     );
   }
 }
