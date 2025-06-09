@@ -1,19 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:real_estate/blocs/signup/signup_state.dart';
 import 'package:real_estate/constans/links_api.dart';
+import '../../../crud.dart';
+import 'login_state.dart';
 
-import '../../crud.dart';
-
-class LoginCubit extends Cubit<SignupState> {
+class LoginCubit extends Cubit<LoginState> {
   final Crud crud;
 
-  LoginCubit(this.crud) : super(SignupInitial());
+  LoginCubit(this.crud) : super(LoginInitial());
 
   Future<void> login({
     required String email,
     required String password,
   }) async {
-    emit(SignupLoading());
+    emit(LoginLoading());
     try {
       final response = await crud.postRequest(
         AppLink.login,
@@ -24,7 +23,7 @@ class LoginCubit extends Cubit<SignupState> {
       );
       print("login response: $response");
       if (response != null && response['status'] == "success") {
-        emit(SignupSuccess());
+        emit(LoginSuccess());
       } else {
         String errorMessage = "حدث خطأ أثناء تسجيل الدخول";
         if (response != null) {
@@ -34,10 +33,10 @@ class LoginCubit extends Cubit<SignupState> {
             errorMessage = response['error'];
           }
         }
-        emit(SignupFailure(errorMessage));
+        emit(LoginFailure(errorMessage));
       }
     } catch (e) {
-      emit(SignupFailure(e.toString()));
+      emit(LoginFailure(e.toString()));
     }
   }
 }

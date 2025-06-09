@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:real_estate/blocs/signup/signup_state.dart';
 import 'package:real_estate/crud.dart';
+import 'package:real_estate/function/validators.dart';
 import 'package:real_estate/widgets/auth/bottum_go.dart';
 import 'package:real_estate/widgets/auth/bouttom_auth.dart';
-import '../../blocs/signup/signup_cubit.dart';
+import '../../blocs/auth/signup/signup_cubit.dart';
+import '../../blocs/auth/signup/signup_state.dart';
 import '../../widgets/auth/custom_input_field.dart';
 import 'login.dart';
 
@@ -16,6 +17,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final _formKey = GlobalKey<FormState>();
 
   final name = TextEditingController();
   final email = TextEditingController();
@@ -55,77 +57,89 @@ class _SignupState extends State<Signup> {
             }
             return Container(
               padding: const EdgeInsets.all(20),
-              child: ListView(
-                children: [
-                  const SizedBox(height: 30),
-                  const Center(
-                    child: Text(
-                      'إنشاء حساب',
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    const SizedBox(height: 30),
+                    const Center(
+                      child: Text(
+                        'إنشاء حساب',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  CustomInputField(
-                    controller: name,
-                    label: 'اسم المستخدم',
-                    hintText: 'ادخل اسمك',
-                    icon: Icons.person,
-                  ),
-                  const SizedBox(height: 20),
-                   CustomInputField(
-                    controller: email,
-                    label: 'البريد الإلكتروني',
-                    hintText: 'ادخل بريدك الإلكتروني',
-                    icon: Icons.email,
-                  ),
-                  const SizedBox(height: 20),
-                   CustomInputField(
-                     controller: password,
-                    label: 'كلمة المرور',
-                    hintText: 'ادخل كلمة المرور',
-                    icon: Icons.lock,
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 20),
-                   CustomInputField(
-                     controller: passwordConfirmation,
-                    label: 'تأكيد كلمة المرور',
-                    hintText: 'اعد إدخال كلمة المرور',
-                    icon: Icons.lock,
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 20),
-                   CustomInputField(
-                    controller: phoneNumber,
-                    label: 'رقم الهاتف',
-                    hintText: 'ادخل رقم الهاتف',
-                    icon: Icons.phone_android,
-                  ),
-                  const SizedBox(height: 30),
-                  BottumAuth(
-                    title: "انشاء حساب",
-                    onPressed: () {
-                      BlocProvider.of<SignupCubit>(context).signUp(
-                        name: name.text,
-                        email: email.text,
-                        password: password.text,
-                        passwordConfirmation: passwordConfirmation.text,
-                        phoneNumber: phoneNumber.text,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  BottumGo(
-                    questionText: "لديك حساب ؟ ",
-                    actionText: "تسجيل الدخول",
-                    onPressed: () {
-                       Navigator.push(context, MaterialPageRoute(builder: (_) => Login()));
-                    },
-                  ),
-                ],
+                    const SizedBox(height: 30),
+                    CustomInputField(
+                      controller: name,
+                      label: 'اسم المستخدم',
+                      hintText: 'ادخل اسمك',
+                      icon: Icons.person,
+                      validator: Validators.validateName,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomInputField(
+                      controller: email,
+                      label: 'البريد الإلكتروني',
+                      hintText: 'ادخل بريدك الإلكتروني',
+                      icon: Icons.email,
+                      validator: Validators.validateEmail,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomInputField(
+                      controller: password,
+                      label: 'كلمة المرور',
+                      hintText: 'ادخل كلمة المرور',
+                      icon: Icons.lock,
+                      isPassword: true,
+                      validator: Validators.validatePassword,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomInputField(
+                      controller: passwordConfirmation,
+                      label: 'تأكيد كلمة المرور',
+                      hintText: 'اعد إدخال كلمة المرور',
+                      icon: Icons.lock,
+                      isPassword: true,
+                      validator: (value) =>
+                          Validators.validatePasswordConfirmation(value, password.text),
+                    ),
+                    const SizedBox(height: 20),
+                    CustomInputField(
+                      controller: phoneNumber,
+                      label: 'رقم الهاتف',
+                      hintText: 'ادخل رقم الهاتف',
+                      icon: Icons.phone_android,
+                      validator: Validators.validatePhone,
+                    ),
+                    const SizedBox(height: 30),
+                    BottumAuth(
+                      title: "انشاء حساب",
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          BlocProvider.of<SignupCubit>(context).signUp(
+                            name: name.text,
+                            email: email.text,
+                            password: password.text,
+                            passwordConfirmation: passwordConfirmation.text,
+                            phoneNumber: phoneNumber.text,
+                          );
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    BottumGo(
+                      questionText: "لديك حساب ؟ ",
+                      actionText: "تسجيل الدخول",
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => const Login()));
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           },

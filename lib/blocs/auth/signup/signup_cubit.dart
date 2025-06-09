@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:real_estate/blocs/signup/signup_state.dart';
+import 'package:real_estate/blocs/auth/signup/signup_state.dart';
 import 'package:real_estate/constans/links_api.dart';
 
-import '../../crud.dart';
+import '../../../crud.dart';
 
 
 class SignupCubit extends Cubit<SignupState> {

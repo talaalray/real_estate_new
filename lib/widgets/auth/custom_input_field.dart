@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:real_estate/constans/color.dart';
 
-class CustomInputField extends StatelessWidget {
+class CustomInputField extends StatefulWidget {
   final String label;
   final String hintText;
   final IconData icon;
-  final bool obscureText;
   final TextEditingController controller;
-
+  final bool isPassword;
+  final String? Function(String?)? validator; // إضافة validator
 
   const CustomInputField({
     super.key,
     required this.label,
     required this.hintText,
     required this.icon,
-    this.obscureText = false, required this.controller,
+    required this.controller,
+    this.isPassword = false,
+    this.validator,
   });
+
+  @override
+  State<CustomInputField> createState() => _CustomInputFieldState();
+}
+
+class _CustomInputFieldState extends State<CustomInputField> {
+  late bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.isPassword;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +38,35 @@ class CustomInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
-          style: TextStyle(color: AppColor.grey2,fontSize: 20, fontWeight: FontWeight.bold),
+          widget.label,
+          style: TextStyle(
+              color: AppColor.grey2, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         SizedBox(
           height: 53,
-          child: TextField(
-            controller: controller,
-            obscureText: obscureText,
+          child: TextFormField(
+            controller: widget.controller,
+            obscureText: widget.isPassword ? _obscureText : false,
+            validator: widget.validator,
             decoration: InputDecoration(
-              hintText: hintText,
+              hintText: widget.hintText,
               hintStyle: TextStyle(fontSize: 20, color: AppColor.black),
-              prefixIcon: Icon(icon, color: AppColor.black),
-              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+              prefixIcon: Icon(widget.icon, color: AppColor.black),
+              suffixIcon: widget.isPassword
+                  ? IconButton(
+                icon: Icon(
+                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                    color: AppColor.black),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
+                  : null,
+              contentPadding:
+              const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
                 borderSide: const BorderSide(color: Colors.transparent),
