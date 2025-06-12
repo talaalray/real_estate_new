@@ -10,8 +10,8 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: Text("مرحبا"),
       ),
-      body: Column(
-
+      body: Center(
+child: Text("kkk"),
       ),
 
     );

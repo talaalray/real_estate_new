@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:real_estate/constans/routes.dart';
+import 'package:real_estate/screens/home.dart';
 import 'package:real_estate/screens/onboarding/splash.dart';
 
 void main() {
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: SplashOrOnboarding(),
+      routes: routes,
+
     );
   }
 }

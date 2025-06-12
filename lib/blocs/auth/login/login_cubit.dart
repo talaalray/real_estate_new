@@ -22,7 +22,8 @@ class LoginCubit extends Cubit<LoginState> {
         },
       );
       print("login response: $response");
-      if (response != null && response['status'] == "success") {
+      if (response != null && (response['status'] == "success" || response['message']?.contains("success")==true)) {
+
         emit(LoginSuccess());
       } else {
         String errorMessage = "حدث خطأ أثناء تسجيل الدخول";

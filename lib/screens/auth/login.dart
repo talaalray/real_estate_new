@@ -9,7 +9,9 @@ import 'package:real_estate/widgets/auth/bouttom_auth.dart';
 import '../../blocs/auth/login/login_cubit.dart';
 import '../../blocs/auth/login/login_state.dart';
 import '../../constans/color.dart';
+import '../../constans/routes.dart';
 import '../../widgets/auth/custom_input_field.dart';
+import '../home.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -38,7 +40,7 @@ class _LoginState extends State<Login> {
         body: BlocConsumer<LoginCubit, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-              Navigator.of(context).pushNamedAndRemoveUntil("home", (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(AppRoute.home, (route) => false);
             } else if (state is LoginFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.error)),

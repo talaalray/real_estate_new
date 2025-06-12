@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:real_estate/constans/routes.dart';
 import 'package:real_estate/crud.dart';
 import 'package:real_estate/function/validators.dart';
 import 'package:real_estate/widgets/auth/bottum_go.dart';
@@ -43,9 +44,19 @@ class _SignupState extends State<Signup> {
         backgroundColor: Colors.white,
         body: BlocConsumer<SignupCubit, SignupState>(
           listener: (context, state) {
+            print("🔄 BlocListener state: $state");
+
             if (state is SignupSuccess) {
-              Navigator.of(context).pushNamedAndRemoveUntil("home", (route) => false);
+              print("✅ Navigating to verification screen with email: ${state.email}");
+
+              // ✅ التنقل إلى صفحة التحقق
+              Navigator.of(context).pushReplacementNamed(
+                AppRoute.verify,
+                arguments: state.email,
+              );
             } else if (state is SignupFailure) {
+              print("❌ Signup failed: ${state.error}");
+
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.error)),
               );
@@ -134,8 +145,10 @@ class _SignupState extends State<Signup> {
                       questionText: "لديك حساب ؟ ",
                       actionText: "تسجيل الدخول",
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => const Login()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const Login()),
+                        );
                       },
                     ),
                   ],
