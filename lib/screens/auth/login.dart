@@ -58,7 +58,9 @@ class _LoginState extends State<Login> {
                 Center(
                   child: Image.asset(AppImageAsset.login),
                 ),
+
                 const SizedBox(height: 10),
+
                 const Center(
                   child: Text(
                     'تسجيل الدخول',
@@ -68,7 +70,9 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 30),
+
                 Form(  // <-- أضف Form هنا
                   key: _formKey,
                   child: Column(
@@ -80,7 +84,9 @@ class _LoginState extends State<Login> {
                         icon: Icons.email,
                         validator: Validators.validateEmail,
                       ),
+
                       const SizedBox(height: 20),
+
                       CustomInputField(
                         controller: password,
                         label: 'كلمة المرور',
@@ -92,6 +98,7 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                 ),
+
                 Align(
                   alignment: Alignment.centerLeft,
                   child: TextButton(
@@ -110,7 +117,9 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 30),
+
                 BottumAuth(
                   title: "تسجيل الدخول",
                   onPressed: () {
@@ -122,7 +131,9 @@ class _LoginState extends State<Login> {
                     }
                   },
                 ),
+
                 const SizedBox(height: 20),
+
                 BottumGo(
                   questionText: "ليس لديك حساب؟ ",
                   actionText: "إنشاء حساب",

@@ -27,17 +27,24 @@ class Verification extends StatelessWidget {
           child: BlocConsumer<VerifyCubit, VerifyState>(
             listener: (context, state) {
               if (state is VerifySuccess) {
+
+                print('Verification successful, navigating to home');
+
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  context.read<OtpCubit>().clear();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoute.home,
+                        (route) => false,
+                  );
+                });
+              } else if (state is VerifyFailure) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("تم التحقق بنجاح"),
-                    backgroundColor: Colors.green,
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
                   ),
                 );
-
-                context.read<OtpCubit>().clear();
-
-                Navigator.pushNamedAndRemoveUntil(
-                    context, AppRoute.home, (route) => false);
               }
             },
             builder: (context, state) {
@@ -58,9 +65,13 @@ class Verification extends StatelessWidget {
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
+
                   const SizedBox(height: 40),
+
                   Image.asset(AppImageAsset.verify, height: 200),
+
                   const SizedBox(height: 30),
+
                   const Text(
                     'يرجى إدخال الرمز المرسل إلى البريد الالكتروني التالي',
                     style: TextStyle(
@@ -69,7 +80,9 @@ class Verification extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
+
                   const SizedBox(height: 10),
+
                   Text(
                     email,
                     style: const TextStyle(
@@ -78,13 +91,12 @@ class Verification extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+
                   const SizedBox(height: 30),
 
-                   OtpFields(),
+                  OtpFields(),
 
                   const SizedBox(height: 20),
-
-
                 ],
               ),
             ),
@@ -99,6 +111,7 @@ class Verification extends StatelessWidget {
             title: "إرسال",
             onPressed: () {
               final code = context.read<OtpCubit>().fullCode;
+              print('Attempting verification with code: $code');
               if (code.length == 4) {
                 context.read<VerifyCubit>().verifyCode(email, code);
               } else {
