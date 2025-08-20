@@ -26,7 +26,7 @@ Map<String, Widget Function(BuildContext)>routes={
     final email = ModalRoute.of(context)!.settings.arguments as String;
     return Verification(email: email);
   },
-  AppRoute.home : (context) => const Home(),
+  AppRoute.home : (context) =>  Home(),
 
 
 
